@@ -48,6 +48,13 @@ def primeCheck(list):
             sum+=1
     return sum
 
+def gcd(a,b):
+    if(a>b):
+        a,b=b,a
+    if(b%a is 0):
+        return a
+    else:
+        return gcd(b%a,a)
 
 if __name__ == '__main__':
     print(oneToN(4))
@@ -57,5 +64,7 @@ if __name__ == '__main__':
     
     primeList = PrimeListMaker(10)
     print(primeCheck(primeList))
+
+    print(gcd(210,510))
 
 
