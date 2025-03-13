@@ -1,3 +1,6 @@
+
+import random
+
 def oneToN(n):
     sum=0
     for i in range(1,n+1):
@@ -19,6 +22,17 @@ def minMax(list):
         if(max<i):
             max=i
     return min,max
+def getMaxIdx(list):
+    maxVal=list[0]
+    maxIdx=0
+    for i in range(len(list)):
+        if(maxVal<list[i]):
+            maxVal=list[i]
+            maxIdx=i
+    return maxIdx
+
+def getMaxIdx2(list:list):
+    return list.index(max(list))
 
 def isPrime(x):
     for i in range(2,x//2+1):
@@ -50,12 +64,21 @@ def primeCheck(list):
 
 def gcd(a,b):
     if(a>b):
-        a,b = b,a
-    if(b%a == 0):
+        a,b=b,a
+    if(b%a is 0):
         return a
     else:
         return gcd(b%a,a)
-
+    
+def selectionSort(list):
+    if(list is None):
+        return
+    size = len(list)
+    for i in range(size):
+        maxIdx = getMaxIdx2(list[:size-i])
+        list[size-(i+1)],list[maxIdx] = list[maxIdx],list[size-(i+1)]
+    
+    return list
 
 if __name__ == '__main__':
     print(oneToN(4))
@@ -67,3 +90,9 @@ if __name__ == '__main__':
     print(primeCheck(primeList))
 
     print(gcd(210,510))
+    random.seed(10)
+    lst = [9,8,7,6,5,4,3,2,1]
+    lst = [random.randint(0,100) for _ in range(10)] #리스트 컴프리헨션
+    print(f"{lst}")
+    print(selectionSort(lst))
+
