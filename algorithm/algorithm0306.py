@@ -70,32 +70,55 @@ def gcd(a,b):
     else:
         return gcd(b%a,a)
     
-def selectionSort(list):
-    if(list is None):
+def selectionSort(lst):
+    if(lst is None):
         return
-    size = len(list)
+    size = len(lst)
     for i in range(size):
-        maxIdx = getMaxIdx2(list[:size-i])
-        list[size-(i+1)],list[maxIdx] = list[maxIdx],list[size-(i+1)]
+        maxIdx = getMaxIdx2(lst[:size-i])
+        lst[size-(i+1)],lst[maxIdx] = lst[maxIdx],lst[size-(i+1)]
     
-    return list
+    return lst
 
-def migrate(list:list, here, there):
-    temp = list.pop(here)
-    list.insert(there,temp)
+def migrate(lst:list, here, there):
+    temp = lst.pop(here)
+    lst.insert(there,temp)
 
 
-def insertionSort(list):
-    for i in range(len(list)):
+def insertionSort(lst:list):
+    for i in range(len(lst)):
         dest = i
         while dest > 0:
-            if list[dest]>list[dest-1]:
+            if lst[i]>lst[dest-1]:
                 break
             dest-=1
         if i == dest:
             continue
-        migrate(list,i,dest)
+        migrate(lst,i,dest)
+
+def insertionSort2(lst:list):
+    size = len(lst)
+    for i in range(size):
+        for j in range(i):
+            if i == j:
+                continue
+            if lst[i]<lst[j]:
+                migrate(lst,i,j)
+                break
+
+        
     
+def bubbleSort(lst:list):
+    size = len(lst)
+    while True:
+        fin = False
+        for i in range(0, size-1):
+            if lst[i]>lst[i+1]:
+                lst[i],lst[i+1] = lst[i+1],lst[i]
+                fin =True
+        size-=1
+        if(fin==False):
+            break
 
 
 if __name__ == '__main__':
@@ -107,14 +130,24 @@ if __name__ == '__main__':
     primeList = PrimeListMaker(10)
     print(primeCheck(primeList))
 
-    print(gcd(210,510))
-    random.seed(10)
+    print(f"{gcd(210,510)}\n")
+
     lst = [9,8,7,6,5,4,3,2,1]
     lst = [random.randint(0,100) for _ in range(10)] #리스트 컴프리헨션
-    print(f"{lst}")
-    print(selectionSort(lst))
+    print(f"selection sort:{lst}")
+    print(f"result        :{selectionSort(lst)}\n")
 
     lst2 = [random.randint(0,100) for _ in range(10)]
-    print(lst2)
+    print(f"insertion sort:{lst2}")
     insertionSort(lst2)
-    print(lst2)
+    print(f"result        :{lst2}\n")
+
+    lst2_2 = [random.randint(0,100) for _ in range(10)]
+    print(f"insertion sort2:{lst2_2}")
+    insertionSort2(lst2_2)
+    print(f"result        :{lst2_2}\n")
+
+    lst3 = [random.randint(0,100) for _ in range(10)]
+    print(f"bubble sort:{lst3}")
+    bubbleSort(lst3)
+    print(f"result     :{lst3}\n")
