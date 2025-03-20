@@ -80,6 +80,24 @@ def selectionSort(list):
     
     return list
 
+def migrate(list:list, here, there):
+    temp = list.pop(here)
+    list.insert(there,temp)
+
+
+def insertionSort(list):
+    for i in range(len(list)):
+        dest = i
+        while dest > 0:
+            if list[dest]>list[dest-1]:
+                break
+            dest-=1
+        if i == dest:
+            continue
+        migrate(list,i,dest)
+    
+
+
 if __name__ == '__main__':
     print(oneToN(4))
     print(oneToNRec(10))
@@ -96,3 +114,7 @@ if __name__ == '__main__':
     print(f"{lst}")
     print(selectionSort(lst))
 
+    lst2 = [random.randint(0,100) for _ in range(10)]
+    print(lst2)
+    insertionSort(lst2)
+    print(lst2)
