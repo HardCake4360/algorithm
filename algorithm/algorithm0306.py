@@ -80,12 +80,12 @@ def selectionSort(lst):
     
     return lst
 
-def migrate(lst:list, here, there):
+def migrate(lst : list, here, there):
     temp = lst.pop(here)
     lst.insert(there,temp)
 
 
-def insertionSort(lst:list):
+def insertionSort(lst : list):
     for i in range(len(lst)):
         dest = i
         while dest > 0:
@@ -96,7 +96,7 @@ def insertionSort(lst:list):
             continue
         migrate(lst,i,dest)
 
-def insertionSort2(lst:list):
+def insertionSort2(lst : list):
     size = len(lst)
     for i in range(size):
         for j in range(i):
@@ -105,6 +105,24 @@ def insertionSort2(lst:list):
             if lst[i]<lst[j]:
                 migrate(lst,i,j)
                 break
+
+def binarySearch(val, lst : list):
+    start = 0
+    end = len(lst)-1
+    while True:
+        period = end-start
+        mid = start + period//2 + 1
+        if period == 0:
+            return start
+        if lst[mid] > val:
+            start = mid
+        elif lst[mid] < val:
+            end = mid+1
+    
+
+def insertionSort3(lst : list):
+    for i in range(1, len(lst)):
+        migrate(lst, i, binarySearch(lst[i], lst[:i+1]))
 
         
     
@@ -145,7 +163,12 @@ if __name__ == '__main__':
     lst2_2 = [random.randint(0,100) for _ in range(10)]
     print(f"insertion sort2:{lst2_2}")
     insertionSort2(lst2_2)
-    print(f"result        :{lst2_2}\n")
+    print(f"result         :{lst2_2}\n")
+
+    lst2_3 = [random.randint(0,100) for _ in range(4)]
+    print(f"insertion sort3:{lst2_3}")
+    insertionSort3(lst2_3)
+    print(f"result         :{lst2_3}\n")
 
     lst3 = [random.randint(0,100) for _ in range(10)]
     print(f"bubble sort:{lst3}")
