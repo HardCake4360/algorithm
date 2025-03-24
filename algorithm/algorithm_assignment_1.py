@@ -1,10 +1,12 @@
 import random
 
+#두가지 버전을 구현하라고 하셨는데 뭐였는지 정확히 기억이 나지 않아 3가지 버전을 구현했습니다
+
 def migrate(lst : list, here, there): # 선택한 인덱스(here)를 특정 위치(there)로 이동시키는 함수
     temp = lst.pop(here)
     lst.insert(there,temp)
 
-def insertionSort(lst : list): # 삽입정렬1: 순서 비교를 선택한 인덱스부터 앞으로 진행하는 모델
+def insertionSort(lst : list): # 삽입정렬1: 순서 비교를 선택한 인덱스부터 앞으로 진행하는 버전
     for i in range(len(lst)):
         dest = i
         while dest > 0:
@@ -15,7 +17,7 @@ def insertionSort(lst : list): # 삽입정렬1: 순서 비교를 선택한 인�
             continue
         migrate(lst,i,dest)
 
-def insertionSort2(lst : list): # 삽입정렬2: 순서 비교를 앞에서부터 진행하는 모델
+def insertionSort2(lst : list): # 삽입정렬2: 순서 비교를 앞에서부터 진행하는 버전
     size = len(lst)
     for i in range(size):
         for j in range(i):
@@ -36,7 +38,7 @@ def binarySearch(val, lst : list): # 이진탐색 함수
             end = mid
     return start
 
-def insertionSort3(lst : list): # 삽입정렬3: 순서 비교를 위해 이진탐색을 이용한 모델
+def insertionSort3(lst : list): # 삽입정렬3: 순서 비교를 위해 이진탐색을 이용한 버전
     for i in range(1, len(lst)):
         migrate(lst, i, binarySearch(lst[i], lst[:i+1]))
 
