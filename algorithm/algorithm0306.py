@@ -140,8 +140,10 @@ def merge(lst1,lst2):
 def mergeSort(lst : list):
     lst1 = lst[ : len(lst)//2]
     lst2 = lst[len(lst)//2 : ]
-    if True: #종료조건
-        pass
+
+    if len(lst1)<=2: #종료조건
+        return merge(lst1,lst2)
+    
     merge(mergeSort(lst1),mergeSort(lst2))
 
 if __name__ == '__main__':
