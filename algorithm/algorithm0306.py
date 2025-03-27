@@ -122,7 +122,7 @@ def insertionSort3(lst : list): # 삽입정렬3: 순서 비교를 위해 이진�
 
         
     
-def bubbleSort(lst:list):
+def bubbleSort(lst : list):
     size = len(lst)
     while True:
         fin = False
@@ -134,6 +134,15 @@ def bubbleSort(lst:list):
         if(fin==False):
             break
 
+def merge(lst1,lst2):
+    pass
+
+def mergeSort(lst : list):
+    lst1 = lst[ : len(lst)//2]
+    lst2 = lst[len(lst)//2 : ]
+    if True: #종료조건
+        pass
+    merge(mergeSort(lst1),mergeSort(lst2))
 
 if __name__ == '__main__':
     print(oneToN(4))
