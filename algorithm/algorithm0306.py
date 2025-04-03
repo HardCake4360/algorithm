@@ -196,6 +196,22 @@ def mergeSort2(lst : list, p : int, r : int):
     mergeSort2(lst, p, q)
     mergeSort2(lst, q+1, r)
     merge2(lst, p, q, r)
+
+def partition(lst, p, r):
+    pivot = lst[r]
+    i = p-1
+    for j in range(p,r):
+        if lst[j] <= pivot:
+            i += 1
+            migrate(lst, i, j)
+    migrate(lst, i+1, r)
+    return i + 1
+
+def quickSort(lst: list,p: int, r: int):
+    if p < r:
+        q = partition(lst, p, r)
+        quickSort(lst,p,q-1)
+        quickSort(lst,q,r)
     
         
 
@@ -239,3 +255,8 @@ if __name__ == '__main__':
     print(f"merge sort: {lst4}")
     mergeSort2(lst4, 0, len(lst4)-1)
     print(f"result    : {lst4}\n")
+    
+    lst5 = [random.randint(0,100) for _ in range(10)]
+    print(f"quick sort: {lst5}")
+    quickSort(lst5, 0, len(lst5)-1)
+    print(f"result    : {lst5}\n")
