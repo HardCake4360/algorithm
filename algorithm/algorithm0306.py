@@ -247,6 +247,8 @@ n//2칸 떨어진 원소들 끼리 정렬
 1칸 정렬(기존 삽입정렬)
 """
 
+#다음시간 계수, 기수, 버킷 정렬
+
 def stepInsertionSort(lst: list, k: int, h: int):
     pass
 
