@@ -1,5 +1,6 @@
 
 import random
+import heapq
 
 def oneToN(n):
     sum=0
@@ -196,15 +197,19 @@ def mergeSort2(lst : list, p : int, r : int):
     mergeSort2(lst, p, q)
     mergeSort2(lst, q+1, r)
     merge2(lst, p, q, r)
-
+#퀵정렬
+"""
+정렬이 이미 되어있을 경우 최악
+중복 원소가 많을 경우-> 원소들이 한쪽으로 치우쳐 효율 낮아짐
+"""
 def partition(lst, p, r):
     pivot = lst[r]
     i = p-1
     for j in range(p,r):
         if lst[j] <= pivot:
             i += 1
-            migrate(lst, i, j)
-    migrate(lst, i+1, r)
+            lst[i],lst[j] = lst[j],lst[i] #exchange i, j
+    lst[i+1],lst[r] = lst[r],lst[i+1] #exchang i+1, r
     return i + 1
 
 def quickSort(lst: list,p: int, r: int):
@@ -212,8 +217,41 @@ def quickSort(lst: list,p: int, r: int):
         q = partition(lst, p, r)
         quickSort(lst,p,q-1)
         quickSort(lst,q,r)
-    
-        
+
+#힙 정렬
+"""
+우선순위 큐: 완전 이진트리, 루트 값이 최대 또는 최소, 부모가 자식보다 크거나 같음 또는 작거나 같음이 보장됨
+힙 구현이 핵심!
+*******시험에 나올수도???*******
+힙을 만드는 과정에서 힙의 성립을 확인, 루트에서부터 확인
+새로 추가하는과정은 리프노드에 삽입 그리고 성립 확인 -> 업 과정
+삭제는 루트의 값을 꺼낼때 루트를 리프노드와 바꿔치기 하고 새 루트부터 성립확인 -> 뭐지? 팝 과정
+*******************************
+정렬되지 않은 배열 정보-> 완전 이진트리로 변환
+이것을 힙정렬 하기 위해 최대 또는 최소 히피파이(힙화) 시킴
+최소 또는 최대 힙의 루트 값을 n번 꺼내옴 -> 정렬 완료
+
+heapq를 직접 사용하거나 이미 구현된 힙을 활용하는 코딩 테스트도 있음
+
+"""
+
+#셸정렬
+"""
+삽입 정렬은 거의 정렬이 되어있는 입력에 탁월한 성능
+셸 정렬은 삽입 정렬의 성능을 극대화할 수 있게 한 정렬
+삽입 정렬에서 원소의 이동 횟수를 극적으로 줄임
+
+n칸 떨어진 원소들 끼리 정렬
+n//2칸 떨어진 원소들 끼리 정렬
+.... 이 상태의 이점: 거의 정렬이 되어있어 삽입정렬의 효율이 좋은 상태로 만들어줌
+1칸 정렬(기존 삽입정렬)
+"""
+
+def stepInsertionSort(lst: list, k: int, h: int):
+    pass
+
+def shellSort(lst: list):
+    pass
 
 if __name__ == '__main__':
     print(oneToN(4))
@@ -260,3 +298,14 @@ if __name__ == '__main__':
     print(f"quick sort: {lst5}")
     quickSort(lst5, 0, len(lst5)-1)
     print(f"result    : {lst5}\n")
+
+    heap = []
+    for _ in range(10):
+        heapq.heappush(heap, random.randrange(0,100))
+    
+    print(f"min heap: {heap}")
+
+    cnt = len(heap)
+    B = [heapq.heappop(heap) for _ in range(cnt)]
+
+    print(f"result  : {B}")
