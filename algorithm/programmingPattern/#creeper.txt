@@ -1,0 +1,51 @@
+#creeper
+
+class Creeper : Enemy
+{
+    void start{
+        currentState = EnemyState.Stroll;
+        GameObject player = GameObject.Find("player");
+    }
+
+    override attack(){
+        //creeper attack logic
+    }
+
+    void update(){
+
+        if (hp<20) changeState(Flee);
+
+        switch(currentState){
+            case(Attack):
+                if(playerIsDead) 
+                    changeState(stroll);
+                    break;
+                if(attackRangeIsTriggerStaying == false) 
+                    changeState(moveTowardsPlayer);
+                    break;
+                attack();
+                break
+            case(Flee):
+                if(hp>60) 
+                    changeState(stroll);
+                    break;
+                flee();
+                break;
+            case(Stroll):
+                if(chaseRangeIsTriggerStaying) 
+                    changeState(MoveTowardsPlayer);
+                    break;
+                stroll();
+                break
+            case(MoveTowardsPlayer):
+                if(detecRangeIsTriggerStaying == false) 
+                    changeState(stroll);
+                    break;
+                if(attackRangeIsTriggerStaying) 
+                    changeState(Attack);
+                    break;
+                moveTowardsPlayer();
+                break;
+        }
+    }
+}

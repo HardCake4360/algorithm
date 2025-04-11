@@ -1,0 +1,106 @@
+#state pattern pseudo code
+
+#Enemy
+
+public enum EnemyState{
+    Attack,
+    Stroll,
+    Flee,
+    MoveTowardsPlayer
+}
+
+abstract class Enemy{
+    EnemyState currentState
+    float hp;
+
+    //true when player is colliding with each trigger
+    public bool exitRangeIsTriggerStaying; //radius is 15
+    public bool chaseRangeIsTriggerStaying; //radius is 10
+    public bool attackRangeIsTriggerStaying; //radius is 1(this value is always lower than exitRange)
+
+    abstract void attack();
+
+    public void stroll()
+    {
+        //stroll
+    }
+
+    public void flee()
+    {
+        //flee
+    }
+    
+    public void moveTowardsPlayer()
+    {
+        //moveTowardsPlayer
+    }
+
+    public void changeState(EnemyState newState){ currentState = newState; }
+}
+
+################################################################################
+
+#creeper
+
+class Creeper : Enemy
+{
+    void start{
+        currentState = EnemyState.Stroll;
+        GameObject player = GameObject.Find("player");
+    }
+
+    override attack(){
+        //creeper attack logic
+    }
+
+    void update(){
+
+        if (hp<20) changeState(Flee);
+
+        switch(currentState){
+            case(Attack):
+                if(playerIsDead) {
+                    changeState(Stroll);
+                    break;
+                }
+                if(attackRangeIsTriggerStaying == false) {
+                    changeState(MoveTowardsPlayer);
+                    break;
+                }
+
+                attack();
+                break;
+
+            case(Flee):
+                if(hp>60){
+                    changeState(Stroll);
+                    break;
+                }
+
+                flee();
+                break;
+
+            case(Stroll):
+                if(chaseRangeIsTriggerStaying) {
+                    changeState(MoveTowardsPlayer);
+                    break;
+                }
+
+                stroll();
+                break;
+                
+            case(MoveTowardsPlayer):
+                if(exitRangeIsTriggerStaying == false){
+                    changeState(Stroll);
+                    break;
+                }
+                if(attackRangeIsTriggerStaying){
+                    changeState(Attack);
+                    break;
+                } 
+                    
+                moveTowardsPlayer();
+                break;
+        }
+    }
+}
