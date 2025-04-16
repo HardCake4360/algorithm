@@ -137,66 +137,34 @@ def bubbleSort(lst : list):
 
 # 병합, 퀵, 힙, 셸?쉘? 정렬
 
-def merge(lst1,lst2):
-    x,y = 0,0
-    newLst = []
-    for i in range(len(lst1)+len(lst2)):
-        if lst1[x] <= lst2[y]:
-            newLst.append(lst1[x])
-            x +=  1
-        else:
-            newLst.append(lst2[y])
-            y += 1
-
-def merge2(lst, p, q, r):
-    tmp = [None for _ in range(r-p+1)]
+def merge(lst, p, q, r):
+    tmp = lst[:] #[None for _ in range(r-p+1)]
     i=p
     j=q+1
     k=0
 
     print(f"before merge: {lst[p:q+1]}, {lst[q+1:]}")
 
-    while i > q and j > r:
-        print(f"before: [{i} = {lst[i]}, {j} = {lst[j]}, tmp = {tmp}")
-        if lst[i] < lst[j]:
-            tmp[k] = lst[i]
-            i+=1
+    while i <= q and j<=r:
+        if lst[i] <= lst[j]:
+            tmp[k] = lst[i]; k += 1; i += 1
         else:
-            tmp[k] = lst[j]
-            j+=1
-        k+=1
-        print(f"after: [{i} = {lst[i]}, {j} = {lst[j]}, tmp = {tmp}")
-    if i > q:
-        while j <= r:
-            tmp[k]=lst[j]
-            j+=1
-            k+=1
-    else:
-        while i <= q:
-            tmp[k] = lst[i]
-            i+=1
-            k+=1
-    
-    for k in  range(r-p+1):
-        lst[p+k] = tmp[k]
+            tmp[k] = lst[j]; k += 1; j += 1
+    while i <= q:
+        tmp[k] = lst[i]; k += 1; i += 1
+    while j <= r:
+        tmp[k] = lst[j]; k += 1; j += 1
+    i = p; k = 0
+    while i <= r:
+        lst[i]=tmp[k]; k += 1; i += 1
 
-def mergeSort(lst : list):
-    
-    lst1 = lst[ : len(lst)//2]
-    lst2 = lst[len(lst)//2 : ]
-    
-    if len(lst1)<=1 and len(lst2)<=1: #종료조건
-        return merge(lst1,lst2)
-
-    return merge(mergeSort(lst1),mergeSort(lst2))
-    
-def mergeSort2(lst : list, p : int, r : int):
+def mergeSort(lst : list, p : int, r : int):
     if p >= r:
         return
     q = ( p + r ) // 2
-    mergeSort2(lst, p, q)
-    mergeSort2(lst, q+1, r)
-    merge2(lst, p, q, r)
+    mergeSort(lst, p, q)
+    mergeSort(lst, q+1, r)
+    merge(lst, p, q, r)
 #퀵정렬
 """
 정렬이 이미 되어있을 경우 최악
@@ -347,9 +315,9 @@ if __name__ == '__main__':
     bubbleSort(lst3)
     print(f"result     :{lst3}\n")
 
-    lst4 = [random.randint(0,100) for _ in range(10)]
+    lst4 = [random.randint(0,100) for _ in range(4)]
     print(f"merge sort: {lst4}")
-    mergeSort2(lst4, 0, len(lst4)-1)
+    mergeSort(lst4, 0, len(lst4)-1)
     print(f"result    : {lst4}\n")
     
     lst5 = [random.randint(0,100) for _ in range(10)]
