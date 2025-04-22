@@ -71,7 +71,7 @@ def gcd(a,b):
     else:
         return gcd(b%a,a)
     
-def selectionSort(lst):
+def selectionSort(lst): #선택정렬: 최댓값을 비교해 맨 뒤 원소와 바꿔치기 하는 정렬
     if(lst is None):
         return
     size = len(lst)
