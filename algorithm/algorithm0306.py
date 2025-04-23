@@ -186,6 +186,30 @@ def quickSort(lst: list,p: int, r: int):
         quickSort(lst,p,q-1)
         quickSort(lst,q,r)
 
+def part3(lst, p, r):
+    if p >= r:
+        return
+    mid = p
+    pivot = lst[random.randint(p,r)]
+    
+    while mid <= r:
+        if lst[mid] < pivot:
+            lst[p],lst[mid] = lst[mid],lst[p]
+            p += 1
+            mid += 1
+        elif lst[mid] > pivot:
+            lst[r],lst[mid] = lst[mid],lst[r]
+            r -= 1
+        else:
+            mid += 1
+    return p, mid
+
+def quick3(lst,p,r):
+    if p < r:
+        L,R = part3(lst, p, r)
+        quick3(lst, p, L-1)
+        quick3(lst, R, r)
+
 #힙 정렬
 """
 우선순위 큐: 완전 이진트리, 루트 값이 최대 또는 최소, 부모가 자식보다 크거나 같음 또는 작거나 같음이 보장됨
@@ -306,7 +330,7 @@ np완비 문제같은 것이 많지만 어느정도 작동하고 있음
 인접 행렬: 그래프가 n*n 행렬 A[][]로 표현된다. 각각 노드가 인접하는지 표현하는 것이 중점
 무향/방향 표현 둘다 가능
 정점 i, j의 간선 존재 여부를 A[i][j]에 기록
-가중치를 기록할 때는 그냥 A[i][j]에 가중치를 기록록
+가중치를 기록할 때는 그냥 A[i][j]에 가중치를 기록
 """
 
 #이번 시간에 할것: 그래프의 표현현
@@ -373,3 +397,8 @@ if __name__ == '__main__':
     B = [heapq.heappop(heap) for _ in range(cnt)]
 
     print(f"result  : {B}")
+    
+    lstq = [1,2,3,3,3,4,5]
+    print(f"before: {lstq}")
+    quick3(lstq,0,len(lstq)-1)
+    print(f"after:  {lstq}")

@@ -39,7 +39,7 @@ def maxHeap(lst: list, x):
     maxLst.append(-x)
     heapq.heapify(maxLst)
     print(f"insert value: {x}")
-    print(f"pop value: {-heapq.heappop(lst)}")
+    print(f"pop value: {heapq.heappop(lst)}")
     lst = [-maxLst[i] for i in range(len(maxLst))]
     print(lst)
 
