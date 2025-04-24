@@ -224,8 +224,13 @@ def quick3(lst,p,r):
 최소 또는 최대 힙의 루트 값을 n번 꺼내옴 -> 정렬 완료
 
 heapq를 직접 사용하거나 이미 구현된 힙을 활용하는 코딩 테스트도 있음
-
 """
+
+def heapSort(lst):
+    heap = lst[:]
+    heapq.heapify(heap)
+    for i in range(len(heap)):
+        lst[i] = heapq.heappop(heap)
 
 #셸정렬
 """
@@ -238,6 +243,37 @@ n//2칸 떨어진 원소들 끼리 정렬
 .... 이 상태의 이점: 거의 정렬이 되어있어 삽입정렬의 효율이 좋은 상태로 만들어줌
 1칸 정렬(기존 삽입정렬)
 """
+
+# def sortModule(lst,n):
+#     for i in range(n):
+#         j = i
+#         k = j
+#         while j <= len(lst):
+#             if k < 0: continue
+#             if lst[k]<lst[k-n]:
+#                 lst[k], lst[k-n] = lst[k-n],lst[k]
+#                 continue
+#             j+=n
+#     if n <= 1: return
+#     sortModule(lst,n//2)
+        
+    
+# def shellSort(lst):
+#     n = len(lst)//2
+#     sortModule(lst, n)
+        
+def shellSort(lst):
+    l = len(lst)
+    n = l//2
+    while n > 0:
+        for i in range(n,l):
+            temp = lst[i]
+            j = i - n
+            while j >= 0 and lst[j] > temp:
+                lst[j + n] = lst[j]
+                j -= n
+            lst[j + n] = temp
+        n//=2
 
 #다음시간 계수, 기수, 버킷 정렬
 
@@ -335,12 +371,6 @@ np완비 문제같은 것이 많지만 어느정도 작동하고 있음
 
 #이번 시간에 할것: 그래프의 표현현
 
-def stepInsertionSort(lst: list, k: int, h: int):
-    pass
-
-def shellSort(lst: list):
-    pass
-
 if __name__ == '__main__':
     print(oneToN(4))
     print(oneToNRec(10))
@@ -402,3 +432,13 @@ if __name__ == '__main__':
     print(f"before: {lstq}")
     quick3(lstq,0,len(lstq)-1)
     print(f"after:  {lstq}")
+    
+    lsth = [random.randint(1,100) for _ in range(10)]
+    print(f"heap sort before: {lsth}")
+    heapSort(lsth)
+    print(f"after           : {lsth}")
+    
+    lsts = [random.randint(1,100) for _ in range(10)]
+    print(f"shell sort before: {lsts}")
+    shellSort(lsts)
+    print(f"after            : {lsts}")
