@@ -55,13 +55,13 @@ class adjecencyList:
         for i in range(len(self.nodes)):
             if self.nodes[i] == here:
                 self.nodes[i].path.append(there)
-                break
+                return
         print("no such node")
 
     def printList(self):
         for i in range(len(self.nodes)):
             print(f"val: {self.nodes[i].value}")
-            print("paths")
+            print("-paths")
             for j in range(len(self.nodes[i].path)):
                 print(f"{self.nodes[i].path[j].value}")
 
