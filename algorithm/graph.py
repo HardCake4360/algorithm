@@ -47,15 +47,15 @@ class ADLnode:
         self.path = []
 
 class adjecencyList:
-    def __init__(self):
-        self.nodes = []
+    def __init__(self,lst: list):
+        self.nodes = lst
 
     def addNode(self, node: ADLnode):
         self.nodes.append(node)
 
-    def addPath(self, here: ADLnode, there: ADLnode):
+    def addPath(self, here, there: ADLnode):
         for i in range(len(self.nodes)):
-            if self.nodes[i] == here:
+            if self.nodes[i].value == here:
                 self.nodes[i].path.append(there)
                 return
         print("no such node")
@@ -74,6 +74,13 @@ class adjecencyList:
 다이나믹 프로그래밍 알면 좋겠다
 알고리즘 응용까지 알면 좋은데 시간이 없어서 방법론적인 부분만 짚고 넘어가겠다
 하반기에는 다양한 문제의 풀이 방법과 그 근간이 되는 원리에 대해 배워볼 것
+"""
+
+"""
+0508 수업내용
+실습 진행: 만들면서 발생하는 문제들에 집중할 것
+-무향 인접 행렬
+-
 """
 
 if __name__ =="__main__":
@@ -102,17 +109,9 @@ if __name__ =="__main__":
     # ajg.addWeightedPath(2,3,2)
     # ajg.addWeightedPath(1,3,3)
 
-    adl = adjecencyList()
+    adl = adjecencyList([ADLnode("0"),ADLnode("1"),ADLnode("2"),ADLnode("3"),ADLnode("4"),ADLnode("5")])
 
-    miku = ADLnode("miku")
-    teto = ADLnode("teto")
-    rin = ADLnode("rin")
-
-    adl.addNode(miku)
-    adl.addNode(teto)
-    adl.addNode(rin)
-
-    adl.addPath(miku,teto)
-    adl.addPath(teto,miku)
-    adl.addPath(miku,rin)
+    adl.addPath("0","1")
+    adl.addPath("0","2")
+    adl.addPath("1","2")
     adl.printList()
