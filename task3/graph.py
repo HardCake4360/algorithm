@@ -66,31 +66,31 @@ def Prim( V, E, r):
     S = [ 0 for _ in range(len(V))] #방문한 정점
     P = [ None for _ in range(len(V))] #부모 리스트
     W = [ math.inf for _ in range(len(V))] #가중치
-    W[r-1] = 0 #시작 지점이므로 가중치 0으로 설정
+    W[r] = 0 #시작 지점이므로 가중치 0으로 설정
     Q = [] #최소 힙
     
     #준비 과정
     for col in range(len(W)): 
-        if col != r-1 and AdjM[r-1][col] != math.inf: #현재 순회 정점이 시작 정점이 아님 && 시작 정점의 인접들의 가중치가 무한이 아님
-            W[col] = AdjM[r-1][col] #인접 정점의 가중치 기록
+        if col != r and AdjM[r][col] != math.inf: #현재 순회 정점이 시작 정점이 아님 && 시작 정점의 인접들의 가중치가 무한이 아님
+            W[col] = AdjM[r][col] #인접 정점의 가중치 기록
             P[col] = r #부모 설정
     for i in range(len(W)):
-        if i+1 == r: continue #시작지점은 스킵
-        heapq.heappush( Q, (W[i], i+1) ) #Q에 튜플 형식으로 (가중치, 정점번호) 삽입
-    S[r-1] = 1
+        if i == r: continue #시작지점은 스킵
+        heapq.heappush( Q, (W[i], i) ) #Q에 튜플 형식으로 (가중치, 정점번호) 삽입
+    S[r] = 1
     
     #탐색 시작
     while len(Q) > 0: #큐가 빌 떄까지 반복
         weight, u = heapq.heappop(Q) #가중치가 가장 작은 정점 POP 
         print(f"extract {u} with weight {weight}")
-        S[u-1] = 1 #방문 정점에 추가
+        S[u] = 1 #방문 정점에 추가
         for v in range(len(V)): #정점 수 만큼 순회
-            if v == r-1: continue #시작 정점 스킵
-            print(f"adj {v+1} with weight {AdjM[u-1][v]} comparing {W[v]}")
-            if S[v] == 0 and AdjM[u-1][v] < W[v]:  #아직 방문하지 않음 && 인접 정점의 가중치가 순회 정점보다 작음
-                Q.remove( (W[v], v+1)) #Q에서 순회 정점 제거
-                W[v] = AdjM[u-1][v] #순회 정점의 가중치 정상화화
-                heapq.heappush(Q, (W[v], v+1)) #정상화된 가중치로 재삽입
+            if v == r: continue #시작 정점 스킵
+            print(f"adj {v} with weight {AdjM[u][v]} comparing {W[v]}")
+            if S[v] == 0 and AdjM[u][v] < W[v]:  #아직 방문하지 않음 && 인접 정점의 가중치가 순회 정점보다 작음
+                Q.remove( (W[v], v)) #Q에서 순회 정점 제거
+                W[v] = AdjM[u][v] #순회 정점의 가중치 정상화화
+                heapq.heappush(Q, (W[v], v)) #정상화된 가중치로 재삽입
                 P[v] = u #부모 설정정
     print(W)
     print(P)
@@ -102,17 +102,30 @@ def Prim( V, E, r):
 """
 
 def kruskal(V, E):
-    adjM = G(V, E)
-    T = []
-    Q = [{w, e} for e,w in E]
+    T = [] #신장 트리
+    S = [[v] for v in V] #하나의 정점으로 이루어진 n개의 집합
+    
+    #간선 가중치로 정렬
+    Q = [(w, u, v) for (u,v), w in E]
     heapq.heapify(Q)
     
     while len(T) < len(V)-1:
-        weight,(u,v) = heapq.heappop(Q)
-        if True: #u, v가 다른 집합일때
-            T.append((u,v)) #추가할 때 2차원 배열로 알맞는 집합에 추가해야할지도?
-            #u, v가 속한 집합을 합친다
+        w, u, v = heapq.heappop(Q)
+        uSet = findSet(S,u)
+        vSet = findSet(S,v)
+        if uSet != vSet: #u, v가 다른 집합일때
+            T.append((u,v)) 
+            #u에 v 집합을 합친다
+            S[uSet].extend(S[vSet])
+            S.pop(vSet)
+    return T
 
+def findSet(S: list, target): #target이 속한 집합의 인덱스를 반환한는 함수수
+    for i, group in enumerate(S): # i, group: 집합의 인덱스, 집합
+        if target in group:
+            return i
+    return None
+        
 #Topological Sortig Algorithm
 """
 어떤 그래프에 대해
@@ -123,19 +136,35 @@ u의 진출간선과 자신을 제거한다
 
 def topological(V, E):
     lst = [] #위상정렬한 정점들의 리스트트
-    noneIncomingV = V
+    edge = [(True,(u,v)) for (u,v),w in E]
+    visited = []
     
     while len(lst)<len(V):
         #진입간선이 없는 정점 리스트 만드는 부분
-        for u,v in E:
-            if v in noneIncomingV:
-                noneIncomingV.remove(v)
-        #위에서 만든 리스트 이용해 pop하는 부분
-        while noneIncomingV:
-            u = noneIncomingV.pop()
-            lst.append(u)
-            V.pop(u)
+        noneIncomingV = []
+        for u in V:
+            if u in visited:
+                continue
+            hasIncoming = False
             
+            for alive,(i,j) in edge:
+                if alive and j == u:
+                    hasIncoming = True
+                    break
+            if not hasIncoming:
+                noneIncomingV.append(u)
+        #사이클 감지: 진입 간선 없는 정점이 없으면 사이클 존재
+        if not noneIncomingV:
+            print("none solution: cycle detected")
+            return None
+        for u in noneIncomingV:
+            lst.append(u)
+            visited.append(u)
+            #진출간선 삭제
+            for idx,(alive,(i,j)) in enumerate(edge):
+                if i == u:
+                    edge[idx] = (False,(i,j))
+    return lst
 
 #최단경로
 """
@@ -154,54 +183,115 @@ def topological(V, E):
 
 def dijstra(V, E, r): #r: 시작 정점
     adjM = G(V,E)
-    visited = [False for _ in V] #방문 표시
-    S = []
-    Q = [] #가중치 큐
+    dist = [math.inf for _ in V]
+    dist[r] = 0
     P = [None for _ in V] #부모 설정
+    visited = [False for _ in V]
+    
+    Q = [(0,r)] #가중치 큐
     
     for u in V:
-        Q.append(adjM[r][u]) #r에서 u까지 가는 비용 -> 정점 가중치
-    Q[r] = 0
+        if u == r: continue
+        Q.append((adjM[r][u],u)) #r에서 u까지 가는 비용 -> 정점 가중치
+        if adjM[r][u] is not math.inf:
+            P[u] = r
+    heapq.heapify(Q)
     
-    while S != V: #n-1번 순회
-        u = heapq.heappop(S)
-        S.append(u)
-        for v in adjM[u]:
-            if True: #v와 인접 && u.cost + W(u-v) < v.cost
-                S[v] = S[u] + adjM[u][v]
+    while Q:
+        w,u = heapq.heappop(Q)
+        if visited[u]: continue
+        visited[u] = True
+        
+        for v in range(len(V)):
+            if adjM[u][v] == math.inf: continue
+            if not visited[v] and w + adjM[u][v] < dist[v]:
+                dist[v] = w + adjM[u][v]
                 P[v] = u
+                heapq.heappush(Q,(dist[v],v))
+    
+    return P
 
 #Bellman-Ford Shortest Path Algorithm
 """
 다익스트라에서 음의 사이클 확인하는 부분 추가만 한건가?
 """
 def bellmanFord(V, E, r):
-    adjM = G(V,E)
     W = [math.inf for _ in V] #가중치 초기화
-    W[r-1] = 0
+    W[r] = 0
     P = [None for _ in V]
     
-    for u in range(len(V)):
-        for v in adjM[u]:
-            if W[u] + adjM[u][v] < W[v]:
-                W[v] = W[u] + adjM[u][v]
+    for _ in range(len(V)-1):
+        for (u,v),weight in E:
+            if W[u] + weight < W[v]:
+                W[v] = W[u] + weight
                 P[v] = u
     
-        if W[u] + adjM[u][v] < W[v]: 
+    for (u,v),w in E:
+        if W[u] + w < W[v]:
             print("none solution: negative cycle")
             return None
-    
+    return P
     
     
 if __name__ == "__main__":
-    V = [ i+1 for i in range(7)]
+    V = [ i for i in range(7)]
     print(V)
 
-    E = [ ((1, 2), 8), ((2, 3), 10), ((1, 4), 9), ((4, 3),5), ((1, 5), 11), ((5, 4), 13), ((4,7), 12), ((5, 6), 8), ((6, 7), 7) ]
+    E = [ ((0, 1), 8), ((1, 2), 10), ((0, 3), 9), ((3, 2),5), ((0, 4), 11), ((4, 3), 13), ((3,6), 12), ((4, 5), 8), ((5, 6), 7) ]
     
-    Prim(V, E, 1)
-    kruskal(V, E)
+    Prim(V, E, 0)
     
+    kru = kruskal(V,E)
+    print(f'\nkruskal:{kru}\n')
     
+    tpV = [i for i in range(5)]
+    tpE_withCycle = [
+        ((0,1),0),
+        ((1,2),0),
+        ((1,4),0),
+        ((2,4),0),
+        ((2,0),0),
+        ((3,2),0)
+    ]
+    
+    topol = topological(V,E)
+    print(f'topological Sorting: {topol}\n')
+    topol = topological(tpV,tpE_withCycle)
+    print(f'topological Sorting with cycle: {topol}\n')
+    
+    dj = dijstra(V,E,1)
+    print(f'dijstra: {dj}\n')
+    
+    bfV = [ i for i in range(5)]
+    bfE = [
+    ((0, 1), 6),
+    ((0, 3), 7),
+    ((1, 2), 5),
+    ((1, 3), 8),
+    ((1, 4), -4),
+    ((2, 1), -2),
+    ((3, 2), -3),
+    ((3, 4), 9),
+    ((4, 0), 2),
+    ((4, 2), 7),
+    ]
+    bfE_Ncycle = [
+    ((0, 1), 6),
+    ((0, 3), 7),
+    ((1, 2), 5),
+    ((1, 3), 8),
+    ((1, 4), -4),
+    ((2, 1), -2),
+    ((3, 2), -3),
+    ((3, 4), 9),
+    ((4, 0), 2),
+    ((4, 2), -1),
+    ]
+    bfP = bellmanFord(V,E,0)
+    bfN = bellmanFord(bfV,bfE,0)
+    bfNC = bellmanFord(bfV,bfE_Ncycle,0)
+    print(f'bellmanFord only positive w: {bfP}\n')
+    print(f'bellmanFord with negative w: {bfN}\n')
+    print(f'bellmanFord with negative cycle: {bfNC}\n')
     
     
