@@ -154,15 +154,43 @@ def topological(V, E):
 
 def dijstra(V, E, r): #r: 시작 정점
     adjM = G(V,E)
+    visited = [False for _ in V] #방문 표시
+    S = []
+    Q = [] #가중치 큐
+    P = [None for _ in V] #부모 설정
     
+    for u in V:
+        Q.append(adjM[r][u]) #r에서 u까지 가는 비용 -> 정점 가중치
+    Q[r] = 0
     
+    while S != V: #n-1번 순회
+        u = heapq.heappop(S)
+        S.append(u)
+        for v in adjM[u]:
+            if True: #v와 인접 && u.cost + W(u-v) < v.cost
+                S[v] = S[u] + adjM[u][v]
+                P[v] = u
 
 #Bellman-Ford Shortest Path Algorithm
 """
 다익스트라에서 음의 사이클 확인하는 부분 추가만 한건가?
 """
-def bellmanFord(V, E):
-    pass
+def bellmanFord(V, E, r):
+    adjM = G(V,E)
+    W = [math.inf for _ in V] #가중치 초기화
+    W[r-1] = 0
+    P = [None for _ in V]
+    
+    for u in range(len(V)):
+        for v in adjM[u]:
+            if W[u] + adjM[u][v] < W[v]:
+                W[v] = W[u] + adjM[u][v]
+                P[v] = u
+    
+        if W[u] + adjM[u][v] < W[v]: 
+            print("none solution: negative cycle")
+            return None
+    
     
     
 if __name__ == "__main__":
