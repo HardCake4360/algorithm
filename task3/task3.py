@@ -63,12 +63,15 @@ def DFSMain(V, AdjA, s):
 def Prim( V, E, r):
     AdjM = G(V, E)
     
-    S = [ 0 for _ in range(len(V))] #방문한 정점
-    P = [ None for _ in range(len(V))] #부모 리스트
-    W = [ math.inf for _ in range(len(V))] #가중치
+    S = [ False]* len(V) #방문한 정점
+    P = [ None ]* len(V) #부모 리스트
+    W = [ math.inf ]* len(V) #가중치
     W[r] = 0 #시작 지점이므로 가중치 0으로 설정
     Q = [] #최소 힙
-    
+
+    heapq.heappush(Q,(W[r],r))
+    S[r] = True
+    """
     #준비 과정
     for col in range(len(W)): 
         if col != r and AdjM[r][col] != math.inf: #현재 순회 정점이 시작 정점이 아님 && 시작 정점의 인접들의 가중치가 무한이 아님
@@ -78,7 +81,7 @@ def Prim( V, E, r):
         if i == r: continue #시작지점은 스킵
         heapq.heappush( Q, (W[i], i) ) #Q에 튜플 형식으로 (가중치, 정점번호) 삽입
     S[r] = 1
-    
+    """
     #탐색 시작
     while len(Q) > 0: #큐가 빌 떄까지 반복
         weight, u = heapq.heappop(Q) #가중치가 가장 작은 정점 POP 
@@ -87,8 +90,11 @@ def Prim( V, E, r):
         for v in range(len(V)): #정점 수 만큼 순회
             if v == r: continue #시작 정점 스킵
             print(f"adj {v} with weight {AdjM[u][v]} comparing {W[v]}")
-            if S[v] == 0 and AdjM[u][v] < W[v]:  #아직 방문하지 않음 && 인접 정점의 가중치가 순회 정점보다 작음
-                Q.remove( (W[v], v)) #Q에서 순회 정점 제거
+            if S[v] == False and AdjM[u][v] < W[v]:  #아직 방문하지 않음 && 인접 정점의 가중치가 순회 정점보다 작음
+                try:
+                    Q.remove( (W[v], v)) #Q에서 순회 정점 제거
+                except ValueError:
+                    pass
                 W[v] = AdjM[u][v] #순회 정점의 가중치 정상화화
                 heapq.heappush(Q, (W[v], v)) #정상화된 가중치로 재삽입
                 P[v] = u #부모 설정정
@@ -239,6 +245,11 @@ if __name__ == "__main__":
 
     E = [ ((0, 1), 8), ((1, 2), 10), ((0, 3), 9), ((3, 2),5), ((0, 4), 11), ((4, 3), 13), ((3,6), 12), ((4, 5), 8), ((5, 6), 7) ]
     
+    sortedE = E[:]
+    sortedE.sort(key = lambda element: element[1]) #E의 1번째 값을 키값으로 하여 정렬하겠다 ((x, y), z <= 이거)
+    sortedE.sort(key = lambda element: element[0][1]) #E의 0번째 값의 1번쨰 값을 키값으로 하여 정렬하겠다 ((x, y <= 이거), z)
+
+
     Prim(V, E, 0)
     
     kru = kruskal(V,E)

@@ -1,3 +1,6 @@
+import math
+import random
+
 class Graph:
     def __init__(self,lst: list):
         self.nodes= []
@@ -64,8 +67,8 @@ class adjecencyList:
         for i in range(len(self.nodes)):
             print(f"val: {self.nodes[i].value}")
             print("-paths")
-            for j in range(len(self.nodes[i].path)):
-                print(f"{self.nodes[i].path[j].value}")
+            #for j in range(len(self.nodes[i].path)):
+                #print(f"{self.nodes[i].path[j].value}")
 
 #####################################
 
@@ -127,6 +130,21 @@ u의 진출간선과 자신을 제거한다
 다익스트라에서 음의 사이클 확인하는 부분 추가만 한건가?
 """
 
+#0522 수업내용
+"""
+brute-force
+greedy(프림,크루스칼 알고리즘이 여기 해당함): 가장 적은 비용이 드는 것만 선택하는 것것
+dynamic programming(하노이 타워 문제가 여기 해당함):
+"""
+
+def make1(x):
+    if x<0: return math.inf
+    if x == 1: return 0
+    if x == 2 or x == 3: return 1
+    if int(x) != x: return math.inf
+
+    return min(make1(x-1), make1(x/2), make1(x/3)) + 1
+
 if __name__ =="__main__":
     # lst = ["miku","teto","rin"]
     # vocaro = Graph(lst)
@@ -159,3 +177,7 @@ if __name__ =="__main__":
     adl.addPath("0","2")
     adl.addPath("1","2")
     adl.printList()
+
+    randInt = random.randint(1,10)
+    print(make1(randInt))
+
