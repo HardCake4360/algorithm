@@ -1,3 +1,5 @@
+import heapq
+
 #다이나믹 프로그래밍에서 중요한 개념 "memoization"
 
 #피보나치 수열
@@ -113,6 +115,54 @@ def coin(coins:list, val):
 그리디 알고리즘
 """
 
+#쿼드 트리 문제
+"""
+00 01 02 03
+10 11 12 13
+20 21 22 23
+30 31 32 33
+
+00 01 02 03
+04 05 06 07
+08 09 10 11
+12 13 14 15
+"""
+def QuatroTre(image:list, size: int):
+    pass
+
+def quadTree(image:list, size: int):
+    lst = toString(image)
+    upperLeft = [0,2,8,10]
+    temp = []
+    result = []
+    for pivot in upperLeft:
+        temp.append(lst[pivot])
+        temp.append(lst[pivot+1])
+        temp.append(lst[pivot+size])
+        temp.append(lst[pivot+size+1])
+        if '0' in temp and '1' in temp:
+            result.append(toTuple(temp))
+        else:
+            result.append(temp.pop())
+        temp.clear()
+    
+    return result    
+    
+def toString(lst: list):
+    temp = []
+    for line in image:
+        for c in line: 
+            temp.append(c)
+    return temp
+
+def toTuple(lst):
+    return (lst[0],lst[1],lst[2],lst[3])
+
+#백 트래킹: 근손실 문제
+def mLoss(N,K,kit:list):
+    m = 500
+    
+    
 
 if __name__ == "__main__":
     # #fibonacci Sequence
@@ -128,5 +178,13 @@ if __name__ == "__main__":
     # for i in range(10):
     #     a,b = BABBA_BU(i)
     #     print(f"{i}: {a},{b}")
+    
+    image = ["0011",
+             "0011",
+             "1101",
+             "1110"
+             ]
+    print(quadTree(image,4))
 
-
+    kit = [3, 7, 5]
+    mLoss(3,4,kit)
