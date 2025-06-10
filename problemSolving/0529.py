@@ -159,10 +159,25 @@ def toTuple(lst):
     return (lst[0],lst[1],lst[2],lst[3])
 
 #백 트래킹: 근손실 문제
-def mLoss(N,K,kit:list):
-    m = 500
+def mLoss(N,K,kits:list):
+    count = 0
+    for kit in kits:
+        count += dfs(kit,kits,[], K, 0)
+    print(count)
     
-    
+def dfs(kit, kits, visited, K, M):
+    answer = 0
+    if M < 0: return 0
+    M += kit
+    visited.append(kit)
+    print(f"visited {kit}")
+    for i in kits:
+        if len(kits) == len(visited):
+            print("reached end")
+            return 1
+        if i in visited: continue
+        answer += dfs(i,kits,visited[:],K,M-K)
+    return answer
 
 if __name__ == "__main__":
     # #fibonacci Sequence
@@ -188,3 +203,5 @@ if __name__ == "__main__":
 
     kit = [3, 7, 5]
     mLoss(3,4,kit)
+    
+    

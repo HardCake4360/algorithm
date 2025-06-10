@@ -1,6 +1,6 @@
 #깊이우선 탐색 (재귀)
 def dfs(node, visited, graph):
-    visited.add(node)
+    visited.append(node)
     print(node, end = ' ')
     for neighbor in graph[node]:
         if neighbor not in visited:
@@ -28,4 +28,4 @@ if __name__ == "__main__":
         5: []
     }
     
-    dfs(node)
+    dfs(1,[],graph)
