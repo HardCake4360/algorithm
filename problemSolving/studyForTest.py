@@ -1,3 +1,6 @@
+import sys
+sys.setrecursionlimit(10 ** 4)
+
 #깊이우선 탐색 (재귀)
 def dfs(node, visited, graph):
     visited.append(node)
@@ -19,6 +22,31 @@ def dfs_stack(start, graph):
             # 나중에 방문할 노드를 먼저 넣기 위해 reversed
             stack.extend(reversed(graph[node]))
             
+#섬의 개수
+def island(map,w,h):
+    cnt = 0
+    visited = [[False for _ in range(h)] for _ in range(w)]
+    for x in range(len(map)):
+        for y in range(len(map[x])):
+            print(f"({x},{y}): {map[x][y]}")
+            if map[x][y] == 1:
+                if visited[x][y]: continue
+                checkIsland(map,x,y,visited)
+                cnt += 1
+            visited[x][y] = True
+    return cnt
+            
+def checkIsland(map: list, w, h, visited: list):
+    visited[w][h] = True
+    near = [-1, 0, 1]
+    for i in near:
+        if w+i < 0 or w+i >= len(map): continue #범위를 초과했을때
+        for j in near:
+            if h+j < 0 or h+j >= len(map[w]): continue #범위를 초과했을때
+            if map[w+i][h+j] == 1 and not visited[w+i][h+j]:
+                checkIsland(map,w+i,h+j,visited)
+    
+            
 if __name__ == "__main__":
     graph = {
         1: [2, 3],
@@ -29,3 +57,24 @@ if __name__ == "__main__":
     }
     
     dfs(1,[],graph)
+    
+    map1 = [
+        [0,0,0],
+        [0,1,0],
+        [0,0,0],
+    ]
+    map2 = [
+        [0,0,0,0],
+        [0,0,0,0],
+        [0,1,0,1],
+        [0,0,0,1],
+    ]
+    map3 = [
+        [1,0,0,1],
+        [0,0,0,0],
+        [0,0,0,0],
+        [1,0,0,1],
+    ]
+    print(island(map1,3,3))
+    print(island(map2,4,4))
+    print(island(map3,4,4))
