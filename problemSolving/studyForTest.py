@@ -45,6 +45,28 @@ def checkIsland(map: list, w, h, visited: list):
             if h+j < 0 or h+j >= len(map[w]): continue #범위를 초과했을때
             if map[w+i][h+j] == 1 and not visited[w+i][h+j]:
                 checkIsland(map,w+i,h+j,visited)
+                
+def BFS_maze(maze: list): #인접은 상하좌우만
+    x = len(maze[0]) #가로
+    y = len(maze)    #세로
+    
+def BFS(maze: list, w, h, visited: list):
+    Q = [(w,h)]
+    visited[w][h] = 1
+    print(f"start from {w},{h}")
+    nx = [0, -1, 1, 0]
+    ny = [-1, 0, 0, 1]
+    while Q:
+        x,y = Q.pop(0)
+        for i in range(4):
+            dx = x+nx[i]
+            dy = y+ny[i]
+            if not(0 <= dx < len(maze) and 0 <= dy < len(maze[0])): continue
+            
+            if maze[dx][dy] == 1 and visited[dx][dy] == -1:
+                Q.append((dx,dy))
+                visited[dx][dy] = visited[x][y]+1
+                print(f"visited: {dx},{dy}({visited[dx][dy]})")
     
             
 if __name__ == "__main__":
@@ -78,3 +100,13 @@ if __name__ == "__main__":
     print(island(map1,3,3))
     print(island(map2,4,4))
     print(island(map3,4,4))
+    
+    maze = [
+        [1,1,1,1],
+        [0,0,0,1],
+        [1,1,1,1],
+        [1,0,0,0],
+        [1,1,1,1],
+        [1,0,1,1],
+    ]
+    BFS(maze,0,0,[[-1 for _ in range(len(maze[0]))]for _ in range(len(maze))])
