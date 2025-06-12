@@ -63,7 +63,8 @@ def BFS(maze: list, w, h, visited: list):
                 Q.append((dx,dy))
                 visited[dx][dy] = visited[x][y]+1
                 print(f"visited: {dx},{dy}({visited[dx][dy]})")
-                
+
+#인접 리스트 연결 요소 개수 문제       
 def makeGraph(V:list,E:list): #무향 인접 리스트
     for a,b in E:
         V[a-1].append(b-1)
@@ -85,7 +86,20 @@ def dfs_graph(graph:list, visited:list, v):
     for i in graph[v]:
         if visited[i]: continue
         dfs_graph(graph,visited,i)
-            
+        
+def cantor(length):
+    if length == 1:
+        return '-'
+    left    = ""
+    midle   = ""
+    center = length//3
+    for i in range(center):
+        midle += ' '
+    left += cantor(center)
+    return left + midle + left
+    
+    
+    
 if __name__ == "__main__":
     graph = {
         1: [2, 3],
@@ -139,3 +153,5 @@ if __name__ == "__main__":
     
     graph = makeGraph(V,E)
     conection(graph)
+    
+    print(cantor(27))
