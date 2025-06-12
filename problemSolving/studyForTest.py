@@ -45,11 +45,7 @@ def checkIsland(map: list, w, h, visited: list):
             if h+j < 0 or h+j >= len(map[w]): continue #범위를 초과했을때
             if map[w+i][h+j] == 1 and not visited[w+i][h+j]:
                 checkIsland(map,w+i,h+j,visited)
-                
-def BFS_maze(maze: list): #인접은 상하좌우만
-    x = len(maze[0]) #가로
-    y = len(maze)    #세로
-    
+                    
 def BFS(maze: list, w, h, visited: list):
     Q = [(w,h)]
     visited[w][h] = 1
@@ -67,7 +63,28 @@ def BFS(maze: list, w, h, visited: list):
                 Q.append((dx,dy))
                 visited[dx][dy] = visited[x][y]+1
                 print(f"visited: {dx},{dy}({visited[dx][dy]})")
+                
+def makeGraph(V:list,E:list): #무향 인접 리스트
+    for a,b in E:
+        V[a-1].append(b-1)
+        V[b-1].append(a-1)
+    return V
+                
+def conection(graph:list):
+    visited = [False]*len(graph)
+    cnt = 0
+    for i in range(len(graph)):
+        if visited[i]: continue
+        dfs_graph(graph,visited,i)
+        cnt += 1
+    print(cnt)
     
+def dfs_graph(graph:list, visited:list, v):
+    visited[v] = True
+    print(f"visited: {v}")
+    for i in graph[v]:
+        if visited[i]: continue
+        dfs_graph(graph,visited,i)
             
 if __name__ == "__main__":
     graph = {
@@ -110,3 +127,15 @@ if __name__ == "__main__":
         [1,0,1,1],
     ]
     BFS(maze,0,0,[[-1 for _ in range(len(maze[0]))]for _ in range(len(maze))])
+    
+    V = [[] for _ in range(6)]
+    E = [
+        (1,2),
+        (2,5),
+        (5,1),
+        (3,4),
+        (4,6)
+    ]
+    
+    graph = makeGraph(V,E)
+    conection(graph)
